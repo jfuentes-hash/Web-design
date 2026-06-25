@@ -1,0 +1,190 @@
+/* ============================================================
+   layout.css — contenedores, secciones, grids y responsive
+   Breakpoints: 900px (tablet) y 500px (móvil pequeño)
+   ============================================================ */
+
+.wrap {
+  width: 100%;
+  max-width: var(--maxw);
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+
+.section {
+  padding-block: clamp(3.5rem, 8vw, 6.5rem);
+  position: relative;
+}
+
+.section--tight {
+  padding-block: clamp(2.5rem, 5vw, 4rem);
+}
+
+.section--surface {
+  background-color: var(--surface);
+}
+
+.section__head {
+  max-width: 720px;
+  margin-bottom: clamp(2rem, 4vw, 3.2rem);
+}
+
+.section__head--center {
+  margin-inline: auto;
+  text-align: center;
+}
+
+/* ---------- Hero ---------- */
+.hero {
+  position: relative;
+  background-color: var(--purple-deep);
+  color: var(--on-dark);
+  padding-block: clamp(6.5rem, 12vw, 9rem) clamp(3.5rem, 8vw, 6rem);
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.hero__grid {
+  display: grid;
+  grid-template-columns: 1.05fr 0.95fr;
+  gap: clamp(2rem, 5vw, 4rem);
+  align-items: center;
+}
+
+.hero__copy {
+  max-width: 36rem;
+}
+
+.hero h1 {
+  color: var(--on-dark);
+  font-size: clamp(2.4rem, 6vw, 4.1rem);
+  margin-block: 0.6rem 1.1rem;
+}
+
+.hero__lead {
+  color: var(--on-dark-soft);
+  font-size: clamp(1.05rem, 2.2vw, 1.22rem);
+  max-width: 32rem;
+}
+
+.hero__friction {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.4rem;
+  margin-top: 1.6rem;
+}
+
+/* ---------- Diferenciales ---------- */
+.diff-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: clamp(1rem, 2vw, 1.6rem);
+}
+
+/* ---------- Garantía ---------- */
+.guarantee-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: clamp(1.1rem, 2.5vw, 2rem);
+}
+
+/* ---------- Pasos ---------- */
+.steps-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: clamp(1rem, 2.5vw, 1.8rem);
+}
+
+/* ---------- Servicios ---------- */
+.plans-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: clamp(1.2rem, 3vw, 2rem);
+  align-items: stretch;
+}
+
+/* ---------- Galería ---------- */
+.gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  grid-auto-rows: 200px;
+  gap: clamp(0.8rem, 2vw, 1.2rem);
+}
+
+.gallery-tile:nth-child(1) { grid-column: span 4; }
+.gallery-tile:nth-child(2) { grid-column: span 2; }
+.gallery-tile:nth-child(3) { grid-column: span 2; }
+.gallery-tile:nth-child(4) { grid-column: span 2; }
+.gallery-tile:nth-child(5) { grid-column: span 2; }
+
+/* ---------- Fundador ---------- */
+.founder {
+  display: grid;
+  grid-template-columns: 0.7fr 1.3fr;
+  gap: clamp(1.5rem, 4vw, 3rem);
+  align-items: center;
+}
+
+/* ---------- CTA final ---------- */
+.final-cta {
+  background-color: var(--purple-deep);
+  color: var(--on-dark);
+  text-align: center;
+}
+
+.final-cta__inner {
+  max-width: 640px;
+  margin-inline: auto;
+}
+
+/* ---------- Footer ---------- */
+.footer {
+  background-color: var(--purple-deep);
+  color: var(--on-dark-soft);
+  padding-block: clamp(3rem, 6vw, 4.5rem) 2rem;
+}
+
+.footer__grid {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr 1fr;
+  gap: clamp(1.5rem, 4vw, 3rem);
+  margin-bottom: 2.5rem;
+}
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+
+@media (max-width: 900px) {
+  .hero__grid {
+    grid-template-columns: 1fr;
+  }
+  .hero__copy {
+    max-width: none;
+    text-align: center;
+    margin-inline: auto;
+  }
+  .hero__lead { margin-inline: auto; }
+  .hero__friction { justify-content: center; }
+
+  .diff-grid { grid-template-columns: repeat(2, 1fr); }
+  .guarantee-grid { grid-template-columns: 1fr; }
+  .steps-grid { grid-template-columns: repeat(2, 1fr); }
+  .plans-grid { grid-template-columns: 1fr; }
+
+  .gallery-grid {
+    grid-template-columns: repeat(2, 1fr);
+    grid-auto-rows: 180px;
+  }
+  .gallery-tile:nth-child(n) { grid-column: span 1; }
+  .gallery-tile:nth-child(1) { grid-column: span 2; }
+
+  .founder { grid-template-columns: 1fr; text-align: center; }
+  .footer__grid { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 500px) {
+  .diff-grid { grid-template-columns: 1fr; }
+  .steps-grid { grid-template-columns: 1fr; }
+  .gallery-tile:nth-child(1) { grid-column: span 2; }
+  .section { padding-block: clamp(2.8rem, 9vw, 4rem); }
+}

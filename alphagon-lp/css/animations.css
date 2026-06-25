@@ -1,0 +1,65 @@
+/* ============================================================
+   animations.css — scroll-reveal, keyframes, fondo 3D
+   ============================================================ */
+
+/* ---------- Scroll reveal ---------- */
+.reveal {
+  opacity: 0;
+  transform: translateY(26px);
+  transition: opacity 0.7s var(--ease), transform 0.7s var(--ease);
+  will-change: opacity, transform;
+}
+.reveal.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+.reveal[data-delay="1"] { transition-delay: 0.08s; }
+.reveal[data-delay="2"] { transition-delay: 0.16s; }
+.reveal[data-delay="3"] { transition-delay: 0.24s; }
+
+/* ---------- Entrada de pasos del formulario ---------- */
+@keyframes stepIn {
+  from { opacity: 0; transform: translateX(14px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+/* ---------- Pulso suave del nodo (fallback CSS / acentos) ---------- */
+@keyframes softPulse {
+  0%, 100% { opacity: 0.55; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.12); }
+}
+
+/* ---------- Fondo 3D del hero ---------- */
+#hero-canvas {
+  position: fixed;
+  inset: 0;
+  z-index: -2;
+  pointer-events: none;
+}
+
+/* Fallback CSS cuando no hay WebGL o en móvil */
+.hero__fallback {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  background:
+    radial-gradient(120% 90% at 80% 10%, rgba(117, 59, 189, 0.45), transparent 55%),
+    radial-gradient(90% 80% at 10% 90%, rgba(46, 107, 51, 0.35), transparent 50%),
+    var(--purple-deep);
+}
+.hero__fallback svg { position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0.55; }
+.hero__fallback .node {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: softPulse 3.2s ease-in-out infinite;
+}
+.hero__fallback .node--us { animation-delay: 1.6s; }
+
+/* Cuando el canvas WebGL está activo, ocultamos el fallback */
+.webgl-on .hero__fallback { display: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal { opacity: 1; transform: none; }
+  .hero__fallback .node { animation: none; }
+}
