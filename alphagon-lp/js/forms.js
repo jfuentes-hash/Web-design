@@ -21,6 +21,13 @@
   var current = 0;
   var data = {};
 
+  /* ---------- Configuracion HubSpot ----------
+     Rellena estos dos valores con los de tu cuenta para activar el envio
+     real. Mientras esten vacios, el formulario funciona en modo demo:
+     muestra el toast y la pantalla de exito sin enviar nada a ningun sitio. */
+  var HUBSPOT_PORTAL_ID = '';
+  var HUBSPOT_FORM_ID = '';
+
   /* ---------- Mostrar paso ---------- */
   function showStep(i) {
     steps.forEach(function (s, idx) { s.classList.toggle('is-active', idx === i); });
@@ -172,23 +179,49 @@
     showToast('Solicitud recibida. Te respondemos en menos de 24 horas.');
   }
 
-  /* ---------- Conexion del lead (preparada, sin enviar todavia) ----------
-     Mapeo de campos listo para HubSpot Forms. Para activarlo, descomenta
-     la linea de abajo e indica portalId y formId reales. */
+  /* ---------- Conexion del lead a HubSpot Forms ----------
+     Mapea el payload a los campos del formulario de HubSpot. Solo envia si
+     HUBSPOT_PORTAL_ID y HUBSPOT_FORM_ID estan configurados arriba; si no,
+     no hace ninguna peticion (modo demo). */
   function handleSubmit(payload) {
-    var fields = [
-      { name: 'perfil', value: payload.perfil },
-      { name: 'firstname', value: payload.nombre },
-      { name: 'athlete_name', value: payload.atleta },
-      { name: 'athlete_age', value: payload.edad },
-      { name: 'sport', value: payload.deporte },
-      { name: 'email', value: payload.email },
-      { name: 'phone', value: payload.telefono },
-      { name: 'objetivo', value: payload.objetivo },
-      { name: 'presupuesto', value: payload.presupuesto }
-    ];
-    // submitToHubSpot('PORTAL_ID', 'FORM_ID', fields, payload.consent_privacy, payload.consent_whatsapp, payload.consent_newsletter);
-    void fields;
+    if (!HUBSPOT_PORTAL_ID || !HUBSPOT_FORM_ID) return;
+
+    var endpoint = 'https://api.hsforms.com/submissions/v3/integration/submit/' +
+      HUBSPOT_PORTAL_ID + '/' + HUBSPOT_FORM_ID;
+
+    var body = {
+      fields: [
+        { name: 'perfil', value: payload.perfil },
+        { name: 'firstname', value: payload.nombre },
+        { name: 'athlete_name', value: payload.atleta },
+        { name: 'athlete_age', value: payload.edad },
+        { name: 'sport', value: payload.deporte },
+        { name: 'email', value: payload.email },
+        { name: 'phone', value: payload.telefono },
+        { name: 'objetivo', value: payload.objetivo },
+        { name: 'presupuesto', value: payload.presupuesto }
+      ],
+      legalConsentOptions: {
+        consent: {
+          consentToProcess: payload.consent_privacy,
+          text: 'Acepto el tratamiento de mis datos segun la politica de privacidad.',
+          communications: [
+            { value: payload.consent_whatsapp, subscriptionTypeId: 0, text: 'Contacto por WhatsApp para coordinar el analisis.' },
+            { value: payload.consent_newsletter, subscriptionTypeId: 0, text: 'Recibir consejos sobre becas deportivas por correo.' }
+          ]
+        }
+      }
+    };
+
+    // Los subscriptionTypeId (0) deben sustituirse por los IDs reales de tus
+    // tipos de suscripcion en HubSpot (Marketing > Suscripciones).
+    if (window.fetch) {
+      window.fetch(endpoint, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body)
+      }).catch(function () { /* el lead se reintenta desde HubSpot/CRM si procede */ });
+    }
   }
 
   /* ---------- Inicio ---------- */
